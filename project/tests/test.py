@@ -4,7 +4,7 @@ from project import app
 class ProjectTests(unittest.TestCase):
     def setUp(self):
         app.config['TESTING'] = True
-        app.config['DEBUT'] = False
+        app.config['DEBUG'] = False
         self.app = app.test_client()
 
         self.assertEquals(app.debug, False)

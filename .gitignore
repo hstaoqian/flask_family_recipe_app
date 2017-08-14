@@ -5,3 +5,6 @@ __pycache__/
 .DS_Store
 
 .idea
+
+# Instance Folder - used for configuration parameters
+/instance

@@ -8,3 +8,4 @@ __pycache__/
 
 # Instance Folder - used for configuration parameters
 /instance
+db_create.py

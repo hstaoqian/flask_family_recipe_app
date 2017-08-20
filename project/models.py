@@ -1,5 +1,5 @@
-from project import db
-from sqlalchemy.ext.hybrid import hybrid_method
+from project import db, bcrypt
+from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 
 
 class Recipe(db.Model):
@@ -24,22 +24,31 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String, unique=True, nullable=False)
-    password_plaintext = db.Column(db.String, nullable=False)
+    _password = db.Column(db.Binary(60), nullable=False)
     authenticated = db.Column(db.Boolean, default=False)
 
-    def __init__(self, email, password_plaintext):
+    def __init__(self, email, plaintext_password):
         self.email = email
-        self.password_plaintext = password_plaintext
+        self.password = plaintext_password
+        self.authenticated = False
 
     def __repr__(self):
         return '<User {0}>'.format(self.name)
 
+    @hybrid_property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def set_password(self, plaintext_password):
+        self._password = bcrypt.generate_password_hash(plaintext_password)
+
     @hybrid_method
     def is_correct_password(self, plaintext_password):
-        return self.password_plaintext == plaintext_password
+        return bcrypt.check_password_hash(self.password, plaintext_password)
 
     @property
-    def is_authentiacted(self):
+    def is_authenticated(self):
         """Return True if the user is authenticated."""
         return self.authenticated
 

@@ -35,7 +35,7 @@
             {% if current_user.is_authenticated %}
               <li><a href="{{ url_for('recipes.index') }}">Public Recipes</a></li>
               <li><a href="{{ url_for('recipes.add_recipe') }}">Add Recipes</a></li>
-              <li><a href="{{ url_for('user.logout') }}">Log Out</a></li>
+              <li><a href="{{ url_for('users.logout') }}">Log Out</a></li>
             {% else %}
               <li><a href="{{ url_for('users.register') }}">Register</a></li>
               <li><a href="{{ url_for('users.login') }}">Log In</a></li>

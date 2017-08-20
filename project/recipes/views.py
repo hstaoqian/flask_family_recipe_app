@@ -3,7 +3,7 @@ from project.models import Recipe
 from project.recipes.forms import AddRecipeForm
 from project import db
 
-recipes_blueprint = Blueprint('recipes', __name__, template_folder='templates')
+recipes_blueprint = Blueprint('recipes', __name__)
 
 
 def flash_errors(form):

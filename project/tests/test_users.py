@@ -1,6 +1,8 @@
+import os
 import unittest
-from project import app
+from project import app, db
 
+TEST_DB = 'user.db'
 
 class ProjectTests(unittest.TestCase):
     def setUp(self):
@@ -16,6 +18,9 @@ class ProjectTests(unittest.TestCase):
     def test_login_page(self):
         response = self.app.get('/login', follow_redirects=True)
         self.assertIn(b'Future site for logging into Kennedy Family Recipes!', response.data)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()

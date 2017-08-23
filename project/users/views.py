@@ -1,10 +1,28 @@
+from threading import Thread
 from flask import render_template, Blueprint, flash, request, redirect, url_for
 from flask_login import login_user, logout_user, current_user, login_required
+from flask_mail import Message
+from project import app
 from project.users.forms import RegisterForm, LoginForm
 from project.models import User, db
 from sqlalchemy.exc import IntegrityError
+from project import mail
 
 users_blueprint = Blueprint('users', __name__)
+
+
+# helper function
+def send_email(subject, recipients, text_body, html_body):
+    msg = Message(subject, recipients=recipients)
+    msg.body = text_body
+    msg.html = html_body
+    thr = Thread(target=send_async_email, args=[msg])
+    thr.start()
+
+
+def send_async_email(msg):
+    with app.app_context():
+        mail.send(msg)
 
 
 @users_blueprint.route('/register', methods=['GET', 'POST'])
@@ -17,6 +35,12 @@ def register():
                 new_user.authenticated = True
                 db.session.add(new_user)
                 db.session.commit()
+
+                send_email('Registration',
+                           ['hstaoqian@me.com'],
+                           'Thanks for registering with Kennedy Family Recipes!',
+                           '<h3>Thanks for registering with Kennedy Family Recipes!</h3>')
+
                 flash('Thanks for registering!', 'success')
                 return redirect(url_for('recipes.index'))
             except IntegrityError:

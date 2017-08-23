@@ -212,3 +212,13 @@ def user_email_change():
             except IntegrityError:
                 flash('Error! That email already exist!', 'error')
     return render_template('email_change.html', form=form)
+
+@users_blueprint.route('/admin_view_users')
+@login_required
+def admin_view_users():
+    if current_user.role != 'admin':
+        abort(403)
+    else:
+        users = User.query.order_by(User.id).all()
+        return render_template('admin_view_users.html', users=users)
+    return redirect(url_for('recipes.index'))

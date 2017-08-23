@@ -73,7 +73,7 @@ def register():
                 send_confirmation_email(new_user.email)
                 flash('Thanks for registering!  Please check your email to confirm your email address.', 'success')
 
-                return redirect(url_for('recipes.index'))
+                return redirect(url_for('recipes.public_recipes'))
             except IntegrityError:
                 db.session.rollback()
                 flash('ERROR! Email ({}) already exists.'.format(form.email.data), 'error')
@@ -94,7 +94,7 @@ def login():
                 db.session.commit()
                 login_user(user)
                 flash('Thanks for logging in, {}'.format(current_user.email))
-                return redirect(url_for('recipes.index'))
+                return redirect(url_for('recipes.public_recipes'))
             else:
                 flash('ERROR! Incorrect login credentials.', 'error')
     return render_template('login.html', form=form)
@@ -132,7 +132,7 @@ def confirm_email(token):
         db.session.commit()
         flash('Thank you for confirming your email adderess!', 'success')
 
-    return redirect(url_for('recipes.index'))
+    return redirect(url_for('recipes.public_recipes'))
 
 
 @users_blueprint.route('/reset', methods=['GET', 'POST'])
@@ -221,4 +221,4 @@ def admin_view_users():
     else:
         users = User.query.order_by(User.id).all()
         return render_template('admin_view_users.html', users=users)
-    return redirect(url_for('recipes.index'))
+    return redirect(url_for('recipes.public_recipes'))

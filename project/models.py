@@ -1,3 +1,4 @@
+from datetime import datetime
 from project import db, bcrypt
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 
@@ -29,6 +30,9 @@ class User(db.Model):
     email_confirmation_sent_on = db.Column(db.DateTime, nullable=True)
     email_confirmed = db.Column(db.Boolean, nullable=False, default=False)
     email_confirmed_on = db.Column(db.DateTime, nullable=True)
+    registered_on = db.Column(db.DateTime, nullable=True)
+    last_logged_in = db.Column(db.DateTime, nullable=True)
+    current_logged_in = db.Column(db.DateTime, nullable=True)
 
     def __init__(self, email, plaintext_password, email_confirmation_sent_on=None):
         self.email = email
@@ -37,6 +41,9 @@ class User(db.Model):
         self.email_confirmation_sent_on = email_confirmation_sent_on
         self.email_confirmed = False
         self.email_confirmed_on = None
+        self.registered_on = datetime.now()
+        self.last_logged_in = None
+        self.current_logged_in = datetime.now()
 
     def __repr__(self):
         return '<User {0}>'.format(self.name)

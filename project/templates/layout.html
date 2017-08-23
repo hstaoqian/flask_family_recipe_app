@@ -42,7 +42,11 @@
             {% endif %}
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Welcome!</a></li>
+            {% if current_user.is_authenticated %}
+              <li><a href="{{ url_for('users.user_profile') }}">{{ current_user.email }}</a></li>
+            {% else %}
+              <li><a href="#">Welcome!</a></li>
+            {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
       </div><!-- /.container -->
